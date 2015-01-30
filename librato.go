@@ -3,7 +3,7 @@ package metrics
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
+	"log"
 	"net/http"
 	"time"
 )
@@ -41,7 +41,7 @@ func (l *librato) PostMetric(typ, name string, value int64, dur time.Duration) {
 
 		j, err := json.Marshal(b)
 		if nil != err {
-			fmt.Printf("Sink: Cannot marshal gauges %v: %v", b, err)
+			log.Printf("Sink: Cannot marshal gauges %v: %v", b, err)
 			return
 		}
 		go l.post(j)
@@ -51,7 +51,7 @@ func (l *librato) PostMetric(typ, name string, value int64, dur time.Duration) {
 func (l *librato) post(body []byte) {
 	req, err := http.NewRequest("POST", metricsEndpoint, bytes.NewBuffer(body))
 	if nil != err {
-		fmt.Printf("Sink: Cannot create metrics request: %v", err)
+		log.Printf("Sink: Cannot create metrics request: %v", err)
 		return
 	}
 	req.Close = true
@@ -60,7 +60,7 @@ func (l *librato) post(body []byte) {
 	req.SetBasicAuth(l.email, l.token)
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		fmt.Printf("Sink: Cannot post metrics request: %v", err)
+		log.Printf("Sink: Cannot post metrics request: %v", err)
 		return
 	}
 	resp.Body.Close()
