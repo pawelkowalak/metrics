@@ -1,5 +1,7 @@
 # metrics
 
+[![GoDoc](https://godoc.org/github.com/viru/metrics?status.svg)](https://godoc.org/github.com/viru/metrics)
+
 ```
 import "github.com/viru/metrics"
 
